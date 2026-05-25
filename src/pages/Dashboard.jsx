@@ -65,18 +65,15 @@ export default function Dashboard() {
   }, {})
   const priorityData = Object.entries(byPriority).map(([name, value]) => ({ name, value }))
 
-  // Group by subject/category for bar chart
-  const byCategory = issues.reduce((acc, i) => {
-    const s = i.subject || 'Sem categoria'
-    // Normaliza para title case curto — pega até a primeira vírgula ou parêntese
-    const label = s.split(/[,(]/)[0].trim()
-    acc[label] = (acc[label] || 0) + 1
+  // Group by tracker type for bar chart
+  const byTracker = issues.reduce((acc, i) => {
+    const t = i.tracker?.name || 'Outros'
+    acc[t] = (acc[t] || 0) + 1
     return acc
   }, {})
-  const categoryData = Object.entries(byCategory)
+  const trackerData = Object.entries(byTracker)
     .map(([name, value]) => ({ name, value }))
     .sort((a, b) => b.value - a.value)
-    .slice(0, 6)
 
   const urgentCount = issues.filter(i => i.priority?.name === 'Urgente').length
 
@@ -118,14 +115,14 @@ export default function Dashboard() {
             </ResponsiveContainer>
           </div>
 
-          {/* Category Bar */}
+          {/* Tracker Bar */}
           <div className="card p-5">
-            <h3 className="font-semibold text-gray-800 mb-4">Chamados por Categoria</h3>
+            <h3 className="font-semibold text-gray-800 mb-4">Chamados por Tipo</h3>
             <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={categoryData} layout="vertical">
+              <BarChart data={trackerData} layout="vertical">
                 <CartesianGrid strokeDasharray="3 3" horizontal={false} />
                 <XAxis type="number" tick={{ fontSize: 12 }} allowDecimals={false} />
-                <YAxis dataKey="name" type="category" width={130} tick={{ fontSize: 10 }} />
+                <YAxis dataKey="name" type="category" width={150} tick={{ fontSize: 11 }} />
                 <Tooltip />
                 <Bar dataKey="value" fill="#c62828" radius={[0, 4, 4, 0]} />
               </BarChart>
