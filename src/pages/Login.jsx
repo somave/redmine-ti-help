@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
-import { Eye, EyeOff } from 'lucide-react'
+import { Lock, User, Eye, EyeOff } from 'lucide-react'
 
 export default function Login() {
   const { login } = useAuth()
@@ -24,11 +24,11 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-white" style={{ fontFamily: 'Verdana, Tahoma, Arial, sans-serif' }}>
+    <div className="min-h-screen flex flex-col bg-[#f5f5f5]">
 
-      {/* Header — igual ao Redmine */}
+      {/* Header */}
       <header
-        className="flex items-center px-6"
+        className="flex items-center px-6 shrink-0"
         style={{ backgroundColor: '#c62828', borderBottom: '3px solid #ff6f00', height: '80px' }}
       >
         <img src="/logo_somave.png" alt="Somave" style={{ height: '52px', objectFit: 'contain' }} />
@@ -36,71 +36,57 @@ export default function Login() {
       </header>
 
       {/* Corpo */}
-      <main className="flex-1 flex items-center justify-center bg-white py-12 px-4">
-        <div
-          className="w-full"
-          style={{ maxWidth: '340px' }}
-        >
-          {/* Card creme — igual ao box do Redmine */}
-          <div
-            className="rounded p-7"
-            style={{ backgroundColor: '#fef9e4', border: '1px solid #ddd5aa' }}
-          >
+      <main className="flex-1 flex items-center justify-center py-12 px-4">
+        <div className="w-full max-w-md">
+          <div className="bg-white rounded-2xl shadow-xl p-8">
+            <div className="flex items-center gap-2 mb-6">
+              <div className="w-1 h-6 rounded-full shrink-0" style={{ backgroundColor: '#ff6f00' }} />
+              <h2 className="text-lg font-semibold text-gray-800">Entrar com sua conta</h2>
+            </div>
+
             {error && (
-              <div
-                className="mb-4 p-2 rounded text-sm"
-                style={{ backgroundColor: '#ffebee', border: '1px solid #c62828', color: '#b71c1c' }}
-              >
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
                 {error}
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-bold text-gray-800 mb-1">Usuário</label>
-                <input
-                  type="text"
-                  value={username}
-                  onChange={e => setUsername(e.target.value)}
-                  placeholder=""
-                  className="w-full border border-gray-400 px-2 py-1.5 text-sm bg-white"
-                  style={{ borderRadius: '2px' }}
-                  required
-                  autoComplete="username"
-                  autoFocus
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-1">Usuário</label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input
+                    type="text"
+                    value={username}
+                    onChange={e => setUsername(e.target.value)}
+                    placeholder="seu.usuario"
+                    className="input pl-10"
+                    required
+                    autoComplete="username"
+                    autoFocus
+                  />
+                </div>
               </div>
 
               <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-sm font-bold text-gray-800">Senha</label>
-                  <a
-                    href="https://redmine.somave.com.br/account/lost_password"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-xs"
-                    style={{ color: '#5c5c5c' }}
-                  >
-                    Perdi minha senha
-                  </a>
-                </div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Senha</label>
                 <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input
                     type={showPass ? 'text' : 'password'}
                     value={password}
                     onChange={e => setPassword(e.target.value)}
-                    className="w-full border border-gray-400 px-2 py-1.5 text-sm bg-white pr-8"
-                    style={{ borderRadius: '2px' }}
+                    placeholder="••••••••"
+                    className="input pl-10 pr-10"
                     required
                     autoComplete="current-password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPass(p => !p)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                    tabIndex={-1}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                   >
-                    {showPass ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                    {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
@@ -108,28 +94,33 @@ export default function Login() {
               <button
                 type="submit"
                 disabled={loading || !username || !password}
-                className="w-full py-2 text-white text-sm font-bold transition-colors disabled:opacity-50"
-                style={{ backgroundColor: '#c62828', borderRadius: '3px' }}
-                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#b71c1c'}
-                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#c62828'}
+                className="btn-primary w-full py-3 mt-2"
               >
-                {loading ? 'Entrando...' : 'Entrar'}
+                {loading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                    </svg>
+                    Entrando...
+                  </span>
+                ) : 'Entrar'}
               </button>
             </form>
-          </div>
 
-          <p className="text-center text-xs text-gray-400 mt-4">
-            Use as mesmas credenciais do Redmine
-          </p>
+            <p className="text-center text-xs text-gray-400 mt-6">
+              Use as mesmas credenciais de acesso ao sistema
+            </p>
+          </div>
         </div>
       </main>
 
-      {/* Footer — igual ao Redmine */}
+      {/* Footer */}
       <footer
-        className="text-center py-2.5 text-xs text-white"
+        className="text-center py-2.5 text-xs text-white shrink-0"
         style={{ backgroundColor: '#c62828' }}
       >
-        Powered by <strong>Redmine</strong> · Sistema de Chamados T.I. – Somave
+        Sistema de Chamados T.I. &mdash; Somave Alimentos
       </footer>
     </div>
   )
