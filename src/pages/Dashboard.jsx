@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend
 } from 'recharts'
-import { Ticket, CheckCircle, Clock, AlertTriangle, PlusCircle, ArrowRight, UserCheck } from 'lucide-react'
+import { Ticket, CheckCircle, Clock, AlertTriangle, ArrowRight, UserCheck } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { getIssueStats, getMyOpenIssues, getMyAssignedIssues } from '../services/redmineApi'
 import { format, parseISO } from 'date-fns'
@@ -65,14 +65,16 @@ export default function Dashboard() {
   }, {})
   const priorityData = Object.entries(byPriority).map(([name, value]) => ({ name, value }))
 
-  // Group by project for bar chart
-  const byProject = issues.reduce((acc, i) => {
-    const p = i.project?.name || 'Sem projeto'
-    acc[p] = (acc[p] || 0) + 1
+  // Group by subject/category for bar chart
+  const byCategory = issues.reduce((acc, i) => {
+    const s = i.subject || 'Sem categoria'
+    // Normaliza para title case curto — pega até a primeira vírgula ou parêntese
+    const label = s.split(/[,(]/)[0].trim()
+    acc[label] = (acc[label] || 0) + 1
     return acc
   }, {})
-  const projectData = Object.entries(byProject)
-    .map(([name, value]) => ({ name: name.replace('SOMAVE - ', '').replace('FFO - ', ''), value }))
+  const categoryData = Object.entries(byCategory)
+    .map(([name, value]) => ({ name, value }))
     .sort((a, b) => b.value - a.value)
     .slice(0, 6)
 
@@ -81,17 +83,11 @@ export default function Dashboard() {
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
       {/* Welcome */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-bold text-gray-900">
-            Olá, {user?.firstname}! 👋
-          </h2>
-          <p className="text-gray-500 text-sm mt-0.5">Aqui está o resumo dos seus chamados</p>
-        </div>
-        <Link to="/novo" className="hidden sm:flex btn-primary items-center gap-2">
-          <PlusCircle className="w-4 h-4" />
-          Novo Chamado
-        </Link>
+      <div>
+        <h2 className="text-xl font-bold text-gray-900">
+          Olá, {user?.firstname}! 👋
+        </h2>
+        <p className="text-gray-500 text-sm mt-0.5">Aqui está o resumo dos seus chamados</p>
       </div>
 
       {/* Stats */}
@@ -122,14 +118,14 @@ export default function Dashboard() {
             </ResponsiveContainer>
           </div>
 
-          {/* Project Bar */}
+          {/* Category Bar */}
           <div className="card p-5">
-            <h3 className="font-semibold text-gray-800 mb-4">Chamados por Empresa</h3>
+            <h3 className="font-semibold text-gray-800 mb-4">Chamados por Categoria</h3>
             <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={projectData} layout="vertical">
+              <BarChart data={categoryData} layout="vertical">
                 <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                <XAxis type="number" tick={{ fontSize: 12 }} />
-                <YAxis dataKey="name" type="category" width={90} tick={{ fontSize: 11 }} />
+                <XAxis type="number" tick={{ fontSize: 12 }} allowDecimals={false} />
+                <YAxis dataKey="name" type="category" width={130} tick={{ fontSize: 10 }} />
                 <Tooltip />
                 <Bar dataKey="value" fill="#c62828" radius={[0, 4, 4, 0]} />
               </BarChart>
