@@ -272,10 +272,10 @@ export default function NewTicket() {
           </div>
 
           <div className="flex gap-3 pt-2">
-            <button type="submit" disabled={mutation.isPending} className="btn-primary flex-1 py-3">
+            <button type="submit" disabled={mutation.isPending} className="flex-1 py-3 rounded-lg font-medium text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-green-600 hover:bg-green-700">
               {mutation.isPending ? 'Abrindo chamado...' : 'Abrir Chamado'}
             </button>
-            <button type="button" onClick={() => navigate(-1)} className="btn-secondary px-6">
+            <button type="button" onClick={() => navigate(-1)} className="px-6 py-2 rounded-lg font-medium text-white transition-colors bg-somave-red hover:bg-somave-red-dark">
               Cancelar
             </button>
           </div>
