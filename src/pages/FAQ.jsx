@@ -94,7 +94,7 @@ export default function FAQ() {
         <div className="card p-8 text-center text-gray-400">
           <BookOpen className="w-10 h-10 mx-auto mb-2 opacity-40" />
           <p className="mb-3">Nenhum resultado encontrado</p>
-          <Link to="/novo" className="btn-primary inline-flex items-center gap-1.5">
+          <Link to="/novo" className="btn-green inline-flex items-center gap-1.5">
             <PlusCircle className="w-4 h-4" />
             Abrir chamado de suporte
           </Link>
@@ -117,7 +117,7 @@ export default function FAQ() {
       <div className="card p-5 text-center bg-gradient-to-r from-gray-50 to-orange-50 border-somave-orange/20">
         <p className="text-gray-700 font-medium mb-1">Não encontrou o que precisava?</p>
         <p className="text-sm text-gray-500 mb-3">Abra um chamado e o T.I. te ajudará em breve</p>
-        <Link to="/novo" className="btn-primary inline-flex items-center gap-1.5">
+        <Link to="/novo" className="btn-green inline-flex items-center gap-1.5">
           <PlusCircle className="w-4 h-4" />
           Abrir Chamado
         </Link>

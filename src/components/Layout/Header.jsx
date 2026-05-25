@@ -32,7 +32,7 @@ export default function Header({ onMenuClick, title }) {
 
       <button
         onClick={() => navigate('/novo')}
-        className="hidden sm:flex items-center gap-1.5 bg-somave-red text-white text-sm px-3 py-1.5 rounded-lg hover:bg-somave-red-dark transition-colors"
+        className="hidden sm:flex items-center gap-1.5 bg-green-600 text-white text-sm px-3 py-1.5 rounded-lg hover:bg-green-700 transition-colors"
       >
         <PlusCircle className="w-4 h-4" />
         Novo Chamado

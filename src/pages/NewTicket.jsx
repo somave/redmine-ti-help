@@ -102,7 +102,7 @@ export default function NewTicket() {
         <h2 className="text-xl font-bold text-gray-900 mb-2">Chamado aberto com sucesso!</h2>
         <p className="text-gray-500 mb-6">Chamado <span className="font-bold text-somave-red">#{createdId}</span> foi criado.</p>
         <div className="flex gap-3 justify-center">
-          <button onClick={() => navigate(`/chamados/${createdId}`)} className="btn-primary">
+          <button onClick={() => navigate(`/chamados/${createdId}`)} className="btn-green">
             Ver chamado
           </button>
           <button onClick={() => { setSuccess(false); setForm({ project_id: '', tracker_id: '3', subject: '', customSubject: false, description: '', priority_id: '4' }); setFiles([]); setSubjectQuery('') }} className="btn-secondary">

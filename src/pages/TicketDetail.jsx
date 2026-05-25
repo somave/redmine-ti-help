@@ -181,7 +181,7 @@ export default function TicketDetail() {
             <button
               onClick={() => commentMutation.mutate()}
               disabled={!comment.trim() || commentMutation.isPending}
-              className="btn-primary flex items-center gap-2"
+              className="btn-green flex items-center gap-2"
             >
               <Send className="w-4 h-4" />
               {commentMutation.isPending ? 'Enviando...' : 'Enviar'}
