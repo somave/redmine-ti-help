@@ -32,7 +32,6 @@ export default function Login() {
         style={{ backgroundColor: '#c62828', borderBottom: '3px solid #ff6f00', height: '80px' }}
       >
         <img src="/logo_somave.png" alt="Somave" style={{ height: '52px', objectFit: 'contain' }} />
-        <span className="ml-auto text-white text-sm font-bold">Entrar</span>
       </header>
 
       {/* Corpo */}
