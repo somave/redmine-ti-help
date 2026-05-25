@@ -89,7 +89,7 @@ export default function MyTickets() {
             onClick={() => setTab('open')}
             className={`flex-1 py-3 text-sm font-medium transition-colors border-b-2 -mb-px ${
               tab === 'open'
-                ? 'border-blue-600 text-blue-600'
+                ? 'border-somave-red text-somave-red'
                 : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
           >
@@ -99,7 +99,7 @@ export default function MyTickets() {
             onClick={() => setTab('closed')}
             className={`flex-1 py-3 text-sm font-medium transition-colors border-b-2 -mb-px ${
               tab === 'closed'
-                ? 'border-blue-600 text-blue-600'
+                ? 'border-somave-red text-somave-red'
                 : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
           >

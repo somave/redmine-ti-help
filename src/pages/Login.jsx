@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
-import { Monitor, Lock, User, Eye, EyeOff } from 'lucide-react'
+import { Lock, User, Eye, EyeOff } from 'lucide-react'
 
 export default function Login() {
   const { login } = useAuth()
@@ -24,20 +24,23 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-600 flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: 'linear-gradient(135deg, #c62828 0%, #b71c1c 60%, #ff6f00 100%)' }}>
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-white rounded-2xl shadow-xl mb-4">
-            <Monitor className="w-10 h-10 text-blue-700" />
+          <div className="inline-flex items-center justify-center bg-white rounded-2xl shadow-xl mb-4 px-6 py-3">
+            <img src="/logo_somave.png" alt="Somave" className="h-14 object-contain" />
           </div>
-          <h1 className="text-3xl font-bold text-white">T.I. Chamados</h1>
-          <p className="text-blue-200 mt-1 text-sm">Sistema de Suporte – Somave</p>
+          <h1 className="text-2xl font-bold text-white tracking-tight">T.I. Chamados</h1>
+          <p className="text-red-100 mt-1 text-sm">Sistema de Suporte Técnico</p>
         </div>
 
         {/* Card */}
         <div className="bg-white rounded-2xl shadow-2xl p-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-6">Entrar com sua conta Redmine</h2>
+          <div className="flex items-center gap-2 mb-6">
+            <div className="w-1 h-6 rounded-full" style={{ backgroundColor: '#ff6f00' }} />
+            <h2 className="text-lg font-semibold text-gray-800">Entrar com sua conta Redmine</h2>
+          </div>
 
           {error && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
@@ -107,8 +110,8 @@ export default function Login() {
           </p>
         </div>
 
-        <p className="text-center text-blue-300 text-xs mt-4">
-          Problemas para acessar? Entre em contato com o TI
+        <p className="text-center text-red-100 text-xs mt-4">
+          Problemas para acessar? Entre em contato com o T.I.
         </p>
       </div>
     </div>

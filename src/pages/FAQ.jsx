@@ -15,11 +15,11 @@ function FAQItem({ item }) {
         {open ? <ChevronUp className="w-4 h-4 text-gray-400 shrink-0" /> : <ChevronDown className="w-4 h-4 text-gray-400 shrink-0" />}
       </button>
       {open && (
-        <div className="px-4 pb-4 bg-blue-50/30 border-t border-gray-100">
+        <div className="px-4 pb-4 bg-orange-50/40 border-t border-gray-100">
           <div className="text-sm text-gray-700 whitespace-pre-wrap mt-3 leading-relaxed">{item.answer}</div>
           <Link
             to="/novo"
-            className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:underline mt-3 font-medium"
+            className="inline-flex items-center gap-1.5 text-xs text-somave-red hover:underline mt-3 font-medium"
           >
             <PlusCircle className="w-3.5 h-3.5" />
             Ainda precisa de ajuda? Abrir chamado
@@ -45,10 +45,10 @@ export default function FAQ() {
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       {/* Hero */}
-      <div className="card p-6 text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+      <div className="card p-6 text-center text-white" style={{ background: 'linear-gradient(135deg, #c62828, #b71c1c)' }}>
         <BookOpen className="w-10 h-10 mx-auto mb-3 opacity-90" />
         <h2 className="text-xl font-bold mb-1">Base de Conhecimento</h2>
-        <p className="text-blue-100 text-sm mb-4">Encontre respostas para os problemas mais comuns</p>
+        <p className="text-red-100 text-sm mb-4">Encontre respostas para os problemas mais comuns</p>
         <div className="relative max-w-md mx-auto">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
@@ -56,7 +56,7 @@ export default function FAQ() {
             placeholder="Buscar por palavras-chave..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 rounded-lg text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+            className="w-full pl-9 pr-4 py-2 rounded-lg text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-somave-red/30"
           />
         </div>
       </div>
@@ -67,8 +67,9 @@ export default function FAQ() {
           <button
             onClick={() => setActiveCategory(null)}
             className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-              !activeCategory ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:border-blue-300'
+              !activeCategory ? 'text-white' : 'bg-white text-gray-600 border border-gray-200 hover:border-somave-orange'
             }`}
+            style={!activeCategory ? { backgroundColor: '#c62828' } : undefined}
           >
             Todos
           </button>
@@ -77,8 +78,9 @@ export default function FAQ() {
               key={cat.id}
               onClick={() => setActiveCategory(cat.id === activeCategory ? null : cat.id)}
               className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors flex items-center gap-1 ${
-                activeCategory === cat.id ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:border-blue-300'
+                activeCategory === cat.id ? 'text-white' : 'bg-white text-gray-600 border border-gray-200 hover:border-somave-orange'
               }`}
+              style={activeCategory === cat.id ? { backgroundColor: '#c62828' } : undefined}
             >
               <span>{cat.icon}</span>
               {cat.title}
@@ -112,7 +114,7 @@ export default function FAQ() {
       )}
 
       {/* CTA */}
-      <div className="card p-5 text-center bg-gradient-to-r from-gray-50 to-blue-50 border-blue-100">
+      <div className="card p-5 text-center bg-gradient-to-r from-gray-50 to-orange-50 border-somave-orange/20">
         <p className="text-gray-700 font-medium mb-1">Não encontrou o que precisava?</p>
         <p className="text-sm text-gray-500 mb-3">Abra um chamado e o T.I. te ajudará em breve</p>
         <Link to="/novo" className="btn-primary inline-flex items-center gap-1.5">

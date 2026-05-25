@@ -1,7 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import {
-  LayoutDashboard, Ticket, PlusCircle, BookOpen, LogOut, Monitor, X
-} from 'lucide-react'
+import { LayoutDashboard, Ticket, PlusCircle, BookOpen, LogOut, X } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 
 const nav = [
@@ -25,38 +23,50 @@ export default function Sidebar({ open, onClose }) {
       )}
 
       <aside className={`
-        fixed top-0 left-0 h-full w-64 bg-blue-900 text-white z-30 flex flex-col
+        fixed top-0 left-0 h-full w-64 z-30 flex flex-col
         transition-transform duration-300
         ${open ? 'translate-x-0' : '-translate-x-full'}
         lg:translate-x-0 lg:static lg:z-auto
-      `}>
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-blue-800">
-          <div className="flex items-center gap-2">
-            <Monitor className="w-6 h-6 text-blue-300" />
-            <div>
-              <p className="font-bold text-sm leading-tight">T.I. Chamados</p>
-              <p className="text-xs text-blue-400">Somave</p>
+      `} style={{ backgroundColor: '#c62828' }}>
+
+        {/* Logo / Header */}
+        <div className="flex items-center justify-between px-4 py-3 border-b border-[#b71c1c]">
+          <div className="flex items-center gap-2 min-w-0">
+            <img
+              src="/logo_somave.png"
+              alt="Somave"
+              className="h-9 w-auto object-contain shrink-0"
+            />
+            <div className="min-w-0">
+              <p className="font-bold text-xs text-white leading-tight">T.I. Chamados</p>
+              <p className="text-[10px] text-red-200 leading-tight">Suporte Técnico</p>
             </div>
           </div>
-          <button onClick={onClose} className="lg:hidden text-blue-300 hover:text-white">
+          <button onClick={onClose} className="lg:hidden text-red-200 hover:text-white shrink-0 ml-1">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* User info */}
         {user && (
-          <div className="px-4 py-3 border-b border-blue-800">
-            <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-sm font-bold mb-1">
-              {user.firstname?.[0]}{user.lastname?.[0]}
+          <div className="px-4 py-3 border-b border-[#b71c1c]">
+            <div className="flex items-center gap-2">
+              <div
+                className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0"
+                style={{ backgroundColor: '#ff6f00' }}
+              >
+                {user.firstname?.[0]}{user.lastname?.[0]}
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-white truncate">{user.firstname} {user.lastname}</p>
+                <p className="text-xs text-red-200 truncate">{user.mail}</p>
+              </div>
             </div>
-            <p className="text-sm font-medium truncate">{user.firstname} {user.lastname}</p>
-            <p className="text-xs text-blue-400 truncate">{user.mail}</p>
           </div>
         )}
 
         {/* Navigation */}
-        <nav className="flex-1 py-4 px-2 space-y-1">
+        <nav className="flex-1 py-4 px-2 space-y-0.5">
           {nav.map(({ to, icon: Icon, label, end }) => (
             <NavLink
               key={to}
@@ -66,10 +76,11 @@ export default function Sidebar({ open, onClose }) {
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
                 ${isActive
-                  ? 'bg-blue-700 text-white'
-                  : 'text-blue-200 hover:bg-blue-800 hover:text-white'
+                  ? 'text-white'
+                  : 'text-red-100 hover:text-white hover:bg-[#b71c1c]'
                 }`
               }
+              style={({ isActive }) => isActive ? { backgroundColor: '#ff6f00' } : undefined}
             >
               <Icon className="w-5 h-5 shrink-0" />
               {label}
@@ -78,10 +89,10 @@ export default function Sidebar({ open, onClose }) {
         </nav>
 
         {/* Logout */}
-        <div className="p-4 border-t border-blue-800">
+        <div className="p-4 border-t border-[#b71c1c]">
           <button
             onClick={logout}
-            className="flex items-center gap-3 px-3 py-2 w-full rounded-lg text-sm text-blue-300 hover:bg-blue-800 hover:text-white transition-colors"
+            className="flex items-center gap-3 px-3 py-2 w-full rounded-lg text-sm text-red-100 hover:text-white hover:bg-[#b71c1c] transition-colors"
           >
             <LogOut className="w-5 h-5" />
             Sair

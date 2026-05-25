@@ -8,12 +8,17 @@ export default {
     extend: {
       colors: {
         somave: {
-          blue: '#1a3a6b',
-          light: '#2563eb',
+          red:        '#c62828',
+          'red-dark': '#b71c1c',
+          orange:     '#ff6f00',
+          'orange-dk':'#e65100',
+          yellow:     '#ffeb3b',
         }
+      },
+      fontFamily: {
+        sans: ['Verdana', 'Tahoma', 'Arial', 'sans-serif'],
       },
     },
   },
   plugins: [],
 }
-

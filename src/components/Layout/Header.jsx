@@ -20,7 +20,7 @@ export default function Header({ onMenuClick, title }) {
   }, [])
 
   return (
-    <header className="h-14 bg-white border-b border-gray-200 flex items-center px-4 gap-3 sticky top-0 z-10">
+    <header className="h-14 bg-white border-b border-gray-200 flex items-center px-4 gap-3 sticky top-0 z-10 border-l-4 border-l-somave-orange">
       <button
         onClick={onMenuClick}
         className="lg:hidden text-gray-500 hover:text-gray-700 p-1"
@@ -32,7 +32,7 @@ export default function Header({ onMenuClick, title }) {
 
       <button
         onClick={() => navigate('/novo')}
-        className="hidden sm:flex items-center gap-1.5 bg-blue-600 text-white text-sm px-3 py-1.5 rounded-lg hover:bg-blue-700 transition-colors"
+        className="hidden sm:flex items-center gap-1.5 bg-somave-red text-white text-sm px-3 py-1.5 rounded-lg hover:bg-somave-red-dark transition-colors"
       >
         <PlusCircle className="w-4 h-4" />
         Novo Chamado
@@ -57,7 +57,7 @@ export default function Header({ onMenuClick, title }) {
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
               <span className="font-semibold text-sm text-gray-800">Notificações</span>
               {notifications.length > 0 && (
-                <button onClick={clearAll} className="text-xs text-blue-600 hover:underline">Limpar</button>
+                <button onClick={clearAll} className="text-xs text-somave-red hover:underline">Limpar</button>
               )}
             </div>
             {notifications.length === 0 ? (

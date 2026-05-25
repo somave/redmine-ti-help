@@ -88,7 +88,7 @@ export default function Dashboard() {
           </h2>
           <p className="text-gray-500 text-sm mt-0.5">Aqui está o resumo dos seus chamados</p>
         </div>
-        <Link to="/novo" className="btn-primary flex items-center gap-2 hidden sm:flex">
+        <Link to="/novo" className="hidden sm:flex btn-primary items-center gap-2">
           <PlusCircle className="w-4 h-4" />
           Novo Chamado
         </Link>
@@ -96,11 +96,11 @@ export default function Dashboard() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-        <StatCard icon={Ticket} label="Abertos por mim" value={stats?.total_open} color="bg-blue-600" to="/chamados" />
-        <StatCard icon={CheckCircle} label="Fechados por mim" value={stats?.total_closed} color="bg-green-500" />
-        <StatCard icon={UserCheck} label="Atribuídos a mim" value={stats?.total_assigned} color="bg-indigo-500" />
-        <StatCard icon={AlertTriangle} label="Urgentes abertos" value={urgentCount} color="bg-red-500" />
-        <StatCard icon={Clock} label="Total geral" value={(stats?.total_open || 0) + (stats?.total_closed || 0)} color="bg-purple-500" />
+        <StatCard icon={Ticket} label="Abertos por mim" value={stats?.total_open} color="bg-somave-red" to="/chamados" />
+        <StatCard icon={CheckCircle} label="Fechados por mim" value={stats?.total_closed} color="bg-green-600" />
+        <StatCard icon={UserCheck} label="Atribuídos a mim" value={stats?.total_assigned} color="bg-somave-orange" />
+        <StatCard icon={AlertTriangle} label="Urgentes abertos" value={urgentCount} color="bg-somave-red-dark" />
+        <StatCard icon={Clock} label="Total geral" value={(stats?.total_open || 0) + (stats?.total_closed || 0)} color="bg-gray-500" />
       </div>
 
       {/* Charts */}
@@ -131,7 +131,7 @@ export default function Dashboard() {
                 <XAxis type="number" tick={{ fontSize: 12 }} />
                 <YAxis dataKey="name" type="category" width={90} tick={{ fontSize: 11 }} />
                 <Tooltip />
-                <Bar dataKey="value" fill="#3b82f6" radius={[0, 4, 4, 0]} />
+                <Bar dataKey="value" fill="#c62828" radius={[0, 4, 4, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -142,7 +142,7 @@ export default function Dashboard() {
       <div className="card">
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
           <h3 className="font-semibold text-gray-800">Chamados Abertos por Mim</h3>
-          <Link to="/chamados" className="text-sm text-blue-600 hover:underline flex items-center gap-1">
+          <Link to="/chamados" className="text-sm text-somave-red hover:underline flex items-center gap-1">
             Ver todos <ArrowRight className="w-3 h-3" />
           </Link>
         </div>
@@ -150,7 +150,7 @@ export default function Dashboard() {
           <div className="p-8 text-center text-gray-400">
             <Ticket className="w-10 h-10 mx-auto mb-2 opacity-40" />
             <p>Nenhum chamado aberto</p>
-            <Link to="/novo" className="text-blue-600 text-sm hover:underline mt-1 inline-block">
+            <Link to="/novo" className="text-somave-red text-sm hover:underline mt-1 inline-block">
               Abrir primeiro chamado
             </Link>
           </div>

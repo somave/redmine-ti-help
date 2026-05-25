@@ -49,9 +49,11 @@ export default function NewTicket() {
   const trackers = (trackersData?.trackers || []).filter(t => ALLOWED_TRACKER_IDS.includes(t.id))
 
   const trackerCategories = getCategoriesForTracker(parseInt(form.tracker_id))
+    .slice()
+    .sort((a, b) => (b.freq || 0) - (a.freq || 0))
   const filteredTitles = subjectQuery.length > 1
-    ? trackerCategories.filter(t => t.label.toLowerCase().includes(subjectQuery.toLowerCase())).slice(0, 8)
-    : trackerCategories.slice(0, 8)
+    ? trackerCategories.filter(t => t.label.toLowerCase().includes(subjectQuery.toLowerCase()))
+    : trackerCategories
 
   const mutation = useMutation({
     mutationFn: async (data) => {
@@ -98,7 +100,7 @@ export default function NewTicket() {
       <div className="max-w-lg mx-auto card p-8 text-center">
         <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
         <h2 className="text-xl font-bold text-gray-900 mb-2">Chamado aberto com sucesso!</h2>
-        <p className="text-gray-500 mb-6">Chamado <span className="font-bold text-blue-600">#{createdId}</span> foi criado.</p>
+        <p className="text-gray-500 mb-6">Chamado <span className="font-bold text-somave-red">#{createdId}</span> foi criado.</p>
         <div className="flex gap-3 justify-center">
           <button onClick={() => navigate(`/chamados/${createdId}`)} className="btn-primary">
             Ver chamado
@@ -115,7 +117,7 @@ export default function NewTicket() {
     <div className="max-w-2xl mx-auto">
       <div className="card p-6">
         <h2 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
-          <PlusCircle className="w-5 h-5 text-blue-600" />
+          <PlusCircle className="w-5 h-5 text-somave-red" />
           Abrir Novo Chamado
         </h2>
 
@@ -189,7 +191,7 @@ export default function NewTicket() {
                         setForm(f => ({ ...f, subject: t.value, customSubject: false }))
                         setShowSuggestions(false)
                       }}
-                      className="w-full text-left px-3 py-2.5 hover:bg-blue-50 text-sm text-gray-800 flex items-center justify-between border-b border-gray-50 last:border-0"
+                      className="w-full text-left px-3 py-2.5 hover:bg-orange-50 text-sm text-gray-800 flex items-center justify-between border-b border-gray-50 last:border-0"
                     >
                       <span>{t.label}</span>
                       {t.freq > 0 && <span className="text-xs text-gray-400 shrink-0 ml-2">{t.freq}×</span>}
@@ -249,7 +251,7 @@ export default function NewTicket() {
             <label className="block text-sm font-medium text-gray-700 mb-1">Anexos (opcional)</label>
             <div
               onClick={() => fileRef.current?.click()}
-              className="border-2 border-dashed border-gray-200 rounded-lg p-4 text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-colors"
+              className="border-2 border-dashed border-gray-200 rounded-lg p-4 text-center cursor-pointer hover:border-somave-orange hover:bg-orange-50 transition-colors"
             >
               <Paperclip className="w-5 h-5 text-gray-400 mx-auto mb-1" />
               <p className="text-sm text-gray-500">Clique para anexar arquivos (máx. 10MB cada)</p>

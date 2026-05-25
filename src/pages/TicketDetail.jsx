@@ -111,7 +111,7 @@ export default function TicketDetail() {
                 href={att.content_url}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-2 text-sm text-blue-600 hover:underline py-1"
+                className="flex items-center gap-2 text-sm text-somave-red hover:underline py-1"
               >
                 <Paperclip className="w-3.5 h-3.5 shrink-0" />
                 {att.filename}
@@ -133,7 +133,7 @@ export default function TicketDetail() {
             {journals.map(j => (
               <div key={j.id} className="relative pl-4 border-l-2 border-gray-100">
                 <div className="flex items-center gap-2 mb-1">
-                  <div className="absolute -left-1.5 w-3 h-3 rounded-full bg-blue-400" />
+                  <div className="absolute -left-1.5 w-3 h-3 rounded-full bg-somave-orange" />
                   <span className="text-sm font-medium text-gray-800">{j.user?.name}</span>
                   <span className="text-xs text-gray-400">
                     {format(parseISO(j.created_on), "dd/MM/yyyy HH:mm", { locale: ptBR })}
@@ -214,14 +214,14 @@ function MetaItem({ icon: Icon, label, value }) {
 
 function StatusBadge({ status }) {
   const map = {
-    'Novo': 'bg-blue-100 text-blue-700',
-    'Em andamento': 'bg-blue-100 text-blue-700',
+    'Novo': 'bg-red-50 text-somave-red',
+    'Em andamento': 'bg-red-50 text-somave-red',
     'Resolvido': 'bg-green-100 text-green-700',
     'Fechado': 'bg-gray-100 text-gray-600',
     'Fechado por Falta de Resposta': 'bg-gray-100 text-gray-600',
   }
   return (
-    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${map[status] || 'bg-blue-100 text-blue-700'}`}>
+    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${map[status] || 'bg-red-50 text-somave-red'}`}>
       {status}
     </span>
   )
