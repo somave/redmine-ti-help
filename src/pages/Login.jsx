@@ -94,7 +94,7 @@ export default function Login() {
               <button
                 type="submit"
                 disabled={loading || !username || !password}
-                className="btn-primary w-full py-3 mt-2"
+                className="btn-green w-full py-3 mt-2"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
