@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
-import { Lock, User, Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff } from 'lucide-react'
 
 export default function Login() {
   const { login } = useAuth()
@@ -24,96 +24,113 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: 'linear-gradient(135deg, #c62828 0%, #b71c1c 60%, #ff6f00 100%)' }}>
-      <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center bg-white rounded-2xl shadow-xl mb-4 px-6 py-3">
-            <img src="/logo_somave.png" alt="Somave" className="h-14 object-contain" />
-          </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">T.I. Chamados</h1>
-          <p className="text-red-100 mt-1 text-sm">Sistema de Suporte Técnico</p>
-        </div>
+    <div className="min-h-screen flex flex-col bg-white" style={{ fontFamily: 'Verdana, Tahoma, Arial, sans-serif' }}>
 
-        {/* Card */}
-        <div className="bg-white rounded-2xl shadow-2xl p-8">
-          <div className="flex items-center gap-2 mb-6">
-            <div className="w-1 h-6 rounded-full" style={{ backgroundColor: '#ff6f00' }} />
-            <h2 className="text-lg font-semibold text-gray-800">Entrar com sua conta Redmine</h2>
-          </div>
+      {/* Header — igual ao Redmine */}
+      <header
+        className="flex items-center px-6"
+        style={{ backgroundColor: '#c62828', borderBottom: '3px solid #ff6f00', height: '80px' }}
+      >
+        <img src="/logo_somave.png" alt="Somave" style={{ height: '52px', objectFit: 'contain' }} />
+        <span className="ml-auto text-white text-sm font-bold">Entrar</span>
+      </header>
 
-          {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
-              {error}
-            </div>
-          )}
+      {/* Corpo */}
+      <main className="flex-1 flex items-center justify-center bg-white py-12 px-4">
+        <div
+          className="w-full"
+          style={{ maxWidth: '340px' }}
+        >
+          {/* Card creme — igual ao box do Redmine */}
+          <div
+            className="rounded p-7"
+            style={{ backgroundColor: '#fef9e4', border: '1px solid #ddd5aa' }}
+          >
+            {error && (
+              <div
+                className="mb-4 p-2 rounded text-sm"
+                style={{ backgroundColor: '#ffebee', border: '1px solid #c62828', color: '#b71c1c' }}
+              >
+                {error}
+              </div>
+            )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Usuário</label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-bold text-gray-800 mb-1">Usuário</label>
                 <input
                   type="text"
                   value={username}
                   onChange={e => setUsername(e.target.value)}
-                  placeholder="seu.usuario"
-                  className="input pl-10"
+                  placeholder=""
+                  className="w-full border border-gray-400 px-2 py-1.5 text-sm bg-white"
+                  style={{ borderRadius: '2px' }}
                   required
                   autoComplete="username"
+                  autoFocus
                 />
               </div>
-            </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Senha</label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input
-                  type={showPass ? 'text' : 'password'}
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="input pl-10 pr-10"
-                  required
-                  autoComplete="current-password"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPass(p => !p)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-sm font-bold text-gray-800">Senha</label>
+                  <a
+                    href="https://redmine.somave.com.br/account/lost_password"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-xs"
+                    style={{ color: '#5c5c5c' }}
+                  >
+                    Perdi minha senha
+                  </a>
+                </div>
+                <div className="relative">
+                  <input
+                    type={showPass ? 'text' : 'password'}
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    className="w-full border border-gray-400 px-2 py-1.5 text-sm bg-white pr-8"
+                    style={{ borderRadius: '2px' }}
+                    required
+                    autoComplete="current-password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPass(p => !p)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    tabIndex={-1}
+                  >
+                    {showPass ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                  </button>
+                </div>
               </div>
-            </div>
 
-            <button
-              type="submit"
-              disabled={loading || !username || !password}
-              className="btn-primary w-full py-3 mt-2"
-            >
-              {loading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-                  </svg>
-                  Entrando...
-                </span>
-              ) : 'Entrar'}
-            </button>
-          </form>
+              <button
+                type="submit"
+                disabled={loading || !username || !password}
+                className="w-full py-2 text-white text-sm font-bold transition-colors disabled:opacity-50"
+                style={{ backgroundColor: '#c62828', borderRadius: '3px' }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#b71c1c'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#c62828'}
+              >
+                {loading ? 'Entrando...' : 'Entrar'}
+              </button>
+            </form>
+          </div>
 
-          <p className="text-center text-xs text-gray-400 mt-6">
+          <p className="text-center text-xs text-gray-400 mt-4">
             Use as mesmas credenciais do Redmine
           </p>
         </div>
+      </main>
 
-        <p className="text-center text-red-100 text-xs mt-4">
-          Problemas para acessar? Entre em contato com o T.I.
-        </p>
-      </div>
+      {/* Footer — igual ao Redmine */}
+      <footer
+        className="text-center py-2.5 text-xs text-white"
+        style={{ backgroundColor: '#c62828' }}
+      >
+        Powered by <strong>Redmine</strong> · Sistema de Chamados T.I. – Somave
+      </footer>
     </div>
   )
 }
