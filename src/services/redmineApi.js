@@ -53,16 +53,28 @@ export async function getIssue(credentials, id) {
 }
 
 export async function getIssueStats(credentials) {
-  const [open, closed] = await Promise.all([
+  const [open, closed, assigned] = await Promise.all([
     fetch(`${BASE_URL}/issues.json?author_id=me&status_id=open&limit=1`, { headers: getHeaders(credentials) }),
     fetch(`${BASE_URL}/issues.json?author_id=me&status_id=closed&limit=1`, { headers: getHeaders(credentials) }),
+    fetch(`${BASE_URL}/issues.json?assigned_to_id=me&status_id=open&limit=1`, { headers: getHeaders(credentials) }),
   ])
   const openData = await open.json()
   const closedData = await closed.json()
+  const assignedData = await assigned.json()
   return {
     total_open: openData.total_count || 0,
     total_closed: closedData.total_count || 0,
+    total_assigned: assignedData.total_count || 0,
   }
+}
+
+export async function getMyAssignedIssues(credentials, offset = 0, limit = 25) {
+  const res = await fetch(
+    `${BASE_URL}/issues.json?assigned_to_id=me&status_id=open&limit=${limit}&offset=${offset}&sort=updated_on:desc`,
+    { headers: getHeaders(credentials) }
+  )
+  if (!res.ok) throw new Error('Erro ao buscar chamados atribuídos')
+  return res.json()
 }
 
 export async function createIssue(credentials, issueData) {

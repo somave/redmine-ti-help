@@ -1,55 +1,108 @@
-// Títulos atualizados com base na análise do banco de dados Redmine (mai/2026)
-// Frequências baseadas em 1.440 chamados reais, excluindo Marketing e P&D
+// Categorias organizadas por tipo de chamado, baseadas na análise real do banco (mai/2026)
 
-export const USER_TICKET_TITLES = [
-  // Mais frequentes (>50 ocorrências)
-  { value: 'ERRO EM SISTEMA (TELA TRAVADA, MENSAGEM DE ERRO)', label: 'Erro em sistema (tela travada, mensagem de erro)', freq: 302 },
-  { value: 'SOLICITAÇÃO DE ACESSO A SISTEMA OU PASTA', label: 'Solicitação de acesso a sistema ou pasta', freq: 237 },
-  { value: 'IMPRESSORA NÃO FUNCIONANDO', label: 'Impressora não funcionando', freq: 110 },
-  { value: 'SOLICITAÇÃO DE EQUIPAMENTO (NOTEBOOK, CELULAR, PERIFÉRICOS)', label: 'Solicitação de equipamento (notebook, celular, periféricos)', freq: 103 },
-  { value: 'FALHA EM E-MAIL CORPORATIVO', label: 'Falha em e-mail corporativo', freq: 103 },
+const INCIDENTE_CATEGORIES = [
+  // Senior ERP
+  { value: 'ERRO NO SISTEMA SENIOR ERP (TELA TRAVADA, MENSAGEM DE ERRO)', label: 'Erro no sistema Senior ERP (tela travada, mensagem de erro)', freq: 87 },
+  { value: 'SISTEMA SENIOR FORA DO AR / INACESSÍVEL', label: 'Sistema Senior fora do ar / inacessível', freq: 40 },
+  // EDATA
+  { value: 'ERRO NO SISTEMA EDATA (TELA TRAVADA, MENSAGEM DE ERRO)', label: 'Erro no sistema EDATA (tela travada, mensagem de erro)', freq: 95 },
+  { value: 'SISTEMA EDATA FORA DO AR / INACESSÍVEL', label: 'Sistema EDATA fora do ar / inacessível', freq: 20 },
+  // Integration
+  { value: 'FALHA NA INTEGRAÇÃO SENIOR ↔ EDATA', label: 'Falha na integração Senior ↔ EDATA', freq: 35 },
+  // Access
+  { value: 'ERRO DE LOGIN / SENHA OU PERMISSÃO NEGADA EM SISTEMA', label: 'Erro de login / senha ou permissão negada em sistema', freq: 54 },
+  // Email
+  { value: 'FALHA NO E-MAIL CORPORATIVO (NÃO ENVIA / NÃO RECEBE)', label: 'Falha no e-mail corporativo (não envia / não recebe)', freq: 156 },
+  { value: 'E-MAIL RECEBENDO SPAM / MENSAGENS SUSPEITAS', label: 'E-mail recebendo spam / mensagens suspeitas', freq: 10 },
+  // Printer
+  { value: 'IMPRESSORA NÃO IMPRIME / ERRO NA FILA DE IMPRESSÃO', label: 'Impressora não imprime / erro na fila de impressão', freq: 110 },
+  { value: 'IMPRESSORA DE ETIQUETAS NÃO FUNCIONANDO', label: 'Impressora de etiquetas não funcionando', freq: 29 },
+  // Computer / hardware
+  { value: 'COMPUTADOR TRAVADO / LENTO / NÃO LIGA', label: 'Computador travado / lento / não liga', freq: 172 },
+  { value: 'MONITOR COM PROBLEMA / TELA PRETA / SEM SINAL', label: 'Monitor com problema / tela preta / sem sinal', freq: 11 },
+  { value: 'SCANNER NÃO RECONHECIDO / NÃO DIGITALIZA', label: 'Scanner não reconhecido / não digitaliza', freq: 7 },
+  // Network
+  { value: 'SEM ACESSO À INTERNET / REDE CAÍDA', label: 'Sem acesso à internet / rede caída', freq: 58 },
+  { value: 'FALHA NO ACESSO REMOTO / VPN CAÍDA', label: 'Falha no acesso remoto / VPN caída', freq: 15 },
+  // OneDrive / Office
+  { value: 'ERRO NO ONEDRIVE / OFFICE 365 (NÃO SINCRONIZA, NÃO ABRE)', label: 'Erro no OneDrive / Office 365 (não sincroniza, não abre)', freq: 30 },
+]
+
+const REQUISICAO_CATEGORIES = [
+  // Access requests
+  { value: 'SOLICITAÇÃO DE ACESSO AO SISTEMA SENIOR ERP', label: 'Solicitação de acesso ao sistema Senior ERP', freq: 100 },
+  { value: 'SOLICITAÇÃO DE ACESSO AO SISTEMA EDATA', label: 'Solicitação de acesso ao sistema EDATA', freq: 60 },
+  { value: 'SOLICITAÇÃO DE ACESSO A PASTA DE REDE / ONEDRIVE', label: 'Solicitação de acesso a pasta de rede / OneDrive', freq: 57 },
+  { value: 'CRIAÇÃO OU INATIVAÇÃO DE USUÁRIO (AD / SISTEMA)', label: 'Criação ou inativação de usuário (AD / sistema)', freq: 51 },
+  // Equipment
+  { value: 'SOLICITAÇÃO DE NOTEBOOK / COMPUTADOR', label: 'Solicitação de notebook / computador', freq: 80 },
+  { value: 'SOLICITAÇÃO DE CELULAR CORPORATIVO', label: 'Solicitação de celular corporativo', freq: 23 },
+  { value: 'SOLICITAÇÃO DE IMPRESSORA / ETIQUETADORA', label: 'Solicitação de impressora / etiquetadora', freq: 20 },
+  { value: 'SOLICITAÇÃO DE PERIFÉRICO (MOUSE, TECLADO, HEADSET, WEBCAM)', label: 'Solicitação de periférico (mouse, teclado, headset, webcam)', freq: 15 },
+  // Software
   { value: 'INSTALAÇÃO DE SOFTWARE AUTORIZADO', label: 'Instalação de software autorizado', freq: 64 },
-  { value: 'SISTEMA FORA DO AR', label: 'Sistema fora do ar', freq: 62 },
-  { value: 'PROBLEMAS DE ACESSO (LOGIN/SENHA, PERMISSÃO NEGADA)', label: 'Problemas de acesso (login/senha, permissão negada)', freq: 54 },
-  { value: 'SOLICITAÇÃO DE CRIAÇÃO DE USUÁRIO', label: 'Solicitação de criação de usuário', freq: 51 },
-  // Frequentes (20-50)
-  { value: 'CONFIGURAÇÃO DE NOVO DISPOSITIVO (NOTEBOOK, CELULAR, E-MAIL)', label: 'Configuração de novo dispositivo (notebook, celular, e-mail)', freq: 43 },
-  { value: 'PERDA DE CONECTIVIDADE (INTERNET/REDE LOCAL)', label: 'Perda de conectividade (internet/rede local)', freq: 32 },
-  { value: 'COMPUTADOR TRAVANDO / NÃO LIGA / NÃO ABRE ARQUIVOS', label: 'Computador travando / não liga / não abre arquivos', freq: 27 },
-  { value: 'LENTIDÃO EM SISTEMA OU REDE', label: 'Lentidão em sistema ou rede', freq: 19 },
-  // Médios (5-20)
-  { value: 'TROCA DE EQUIPAMENTO POR ATUALIZAÇÃO', label: 'Troca de equipamento por atualização', freq: 12 },
-  { value: 'SOLICITAÇÃO DE RELATÓRIO OU EXTRAÇÃO DE DADOS', label: 'Solicitação de relatório ou extração de dados', freq: 9 },
-  { value: 'INCLUSÃO DE NOVOS CAMPOS/FUNÇÕES EM SISTEMA', label: 'Inclusão de novos campos/funções em sistema', freq: 8 },
   { value: 'SOLICITAÇÃO DE LICENÇA DE SOFTWARE', label: 'Solicitação de licença de software', freq: 8 },
-  // Novos (baseados em padrões identificados nas descrições)
-  { value: 'INSTALAÇÃO DE CERTIFICADO / ASSINATURA DIGITAL', label: 'Instalação de certificado / assinatura digital', freq: 0 },
-  { value: 'FORMATAÇÃO / REINSTALAÇÃO DE COMPUTADOR', label: 'Formatação / reinstalação de computador', freq: 0 },
+  // Reports / data
+  { value: 'SOLICITAÇÃO DE RELATÓRIO / EXTRAÇÃO DE DADOS DO SENIOR', label: 'Solicitação de relatório / extração de dados do Senior', freq: 9 },
+  { value: 'SOLICITAÇÃO DE RELATÓRIO / EXTRAÇÃO DE DADOS DO EDATA', label: 'Solicitação de relatório / extração de dados do EDATA', freq: 9 },
+  // Remote / VPN
   { value: 'SOLICITAÇÃO DE VPN / ACESSO REMOTO', label: 'Solicitação de VPN / acesso remoto', freq: 0 },
+  // Other
+  { value: 'INSTALAÇÃO DE CERTIFICADO / ASSINATURA DIGITAL', label: 'Instalação de certificado / assinatura digital', freq: 7 },
+  { value: 'CONFIGURAÇÃO DE E-MAIL EM NOVO DISPOSITIVO', label: 'Configuração de e-mail em novo dispositivo', freq: 43 },
 ]
 
-export const IT_TICKET_TITLES = [
-  { value: 'ALTERAÇÃO DE CONFIGURAÇÃO DE SERVIDOR', label: 'Alteração de configuração de servidor' },
-  { value: 'ALTERAÇÃO DE PERFIL DE ACESSO EM MASSA', label: 'Alteração de perfil de acesso em massa' },
-  { value: 'ALTERAÇÃO DE WORKFLOW EM SISTEMA ERP', label: 'Alteração de workflow em sistema ERP' },
-  { value: 'ATUALIZAÇÃO DE PATCHES DE SEGURANÇA', label: 'Atualização de patches de segurança' },
-  { value: 'ATUALIZAÇÃO DE VERSÃO DE SISTEMA', label: 'Atualização de versão de sistema' },
-  { value: 'CRIAÇÃO OU ALTERAÇÃO DE ROTINAS AUTOMÁTICAS (SCRIPTS, JOBS)', label: 'Criação ou alteração de rotinas automáticas (scripts, jobs)' },
-  { value: 'DOCUMENTAÇÃO DE PROCESSOS INTERNOS', label: 'Documentação de processos internos' },
-  { value: 'MIGRAÇÃO DE DADOS ENTRE SISTEMAS/SERVIDORES', label: 'Migração de dados entre sistemas/servidores' },
-  { value: 'MONITORAMENTO DE SERVIDORES', label: 'Monitoramento de servidores' },
-  { value: 'MUDANÇA EM REGRAS DE FIREWALL OU REDE', label: 'Mudança em regras de firewall ou rede' },
-  { value: 'ORGANIZAÇÃO DE INVENTÁRIO DE HARDWARE/SOFTWARE', label: 'Organização de inventário de hardware/software' },
-  { value: 'PLANEJAMENTO DE CAPACIDADE (STORAGE, REDE, CPU)', label: 'Planejamento de capacidade (storage, rede, CPU)' },
-  { value: 'PROBLEMAS COM ANTIVÍRUS/SEGURANÇA', label: 'Problemas com antivírus/segurança' },
-  { value: 'PUBLICAÇÃO DE ATUALIZAÇÃO EM SITE OU PORTAL INTERNO', label: 'Publicação de atualização em site ou portal interno' },
-  { value: 'REUNIÕES TÉCNICAS/PLANEJAMENTO', label: 'Reuniões técnicas/planejamento' },
-  { value: 'REVISÃO DE BACKUPS', label: 'Revisão de backups' },
-  { value: 'REVISÃO DE LOGS DE SISTEMA', label: 'Revisão de logs de sistema' },
-  { value: 'REVISÃO DE PERMISSÕES DE ACESSO', label: 'Revisão de permissões de acesso' },
-  { value: 'SOLICITAÇÃO DE CÓPIA/BACKUP DE ARQUIVOS', label: 'Solicitação de cópia/backup de arquivos' },
-  { value: 'TESTES DE CONTINGÊNCIA E PLANO DE CONTINUIDADE', label: 'Testes de contingência e plano de continuidade' },
+const MUDANCA_CATEGORIES = [
+  // Senior permissions
+  { value: 'ALTERAÇÃO DE PERFIL / PERMISSÃO NO SISTEMA SENIOR ERP', label: 'Alteração de perfil / permissão no sistema Senior ERP', freq: 80 },
+  { value: 'ALTERAÇÃO DE REGRA DE APROVAÇÃO / WORKFLOW NO SENIOR', label: 'Alteração de regra de aprovação / workflow no Senior', freq: 10 },
+  { value: 'ATUALIZAÇÃO DE VERSÃO DO SISTEMA SENIOR ERP', label: 'Atualização de versão do sistema Senior ERP', freq: 5 },
+  // EDATA permissions
+  { value: 'ALTERAÇÃO DE PERFIL / PERMISSÃO NO SISTEMA EDATA', label: 'Alteração de perfil / permissão no sistema EDATA', freq: 40 },
+  { value: 'ATUALIZAÇÃO DE VERSÃO DO SISTEMA EDATA', label: 'Atualização de versão do sistema EDATA', freq: 5 },
+  // Integration config
+  { value: 'CONFIGURAÇÃO / AJUSTE DE INTEGRAÇÃO SENIOR ↔ EDATA', label: 'Configuração / ajuste de integração Senior ↔ EDATA', freq: 0 },
+  // Hardware
+  { value: 'FORMATAÇÃO / REINSTALAÇÃO DE COMPUTADOR', label: 'Formatação / reinstalação de computador', freq: 15 },
+  { value: 'TROCA DE EQUIPAMENTO (ATUALIZAÇÃO / UPGRADE)', label: 'Troca de equipamento (atualização / upgrade)', freq: 12 },
+  // Network / infra
+  { value: 'ALTERAÇÃO DE CONFIGURAÇÃO DE REDE / FIREWALL', label: 'Alteração de configuração de rede / firewall', freq: 0 },
+  { value: 'MUDANÇA DE CONFIGURAÇÃO DE E-MAIL / DOMÍNIO', label: 'Mudança de configuração de e-mail / domínio', freq: 0 },
+  { value: 'INCLUSÃO DE NOVOS CAMPOS / FUNÇÕES EM SISTEMA', label: 'Inclusão de novos campos / funções em sistema', freq: 8 },
 ]
+
+const INTERNA_CATEGORIES = [
+  { value: 'MONITORAMENTO DE SERVIDORES / VERIFICAÇÃO DE BACKUPS', label: 'Monitoramento de servidores / verificação de backups', freq: 0 },
+  { value: 'ATUALIZAÇÃO DE PATCHES DE SEGURANÇA', label: 'Atualização de patches de segurança', freq: 0 },
+  { value: 'DOCUMENTAÇÃO DE PROCESSOS INTERNOS DE T.I.', label: 'Documentação de processos internos de T.I.', freq: 0 },
+  { value: 'MIGRAÇÃO DE DADOS ENTRE SISTEMAS / SERVIDORES', label: 'Migração de dados entre sistemas / servidores', freq: 0 },
+  { value: 'REVISÃO DE LOGS / AUDITORIA DE ACESSOS', label: 'Revisão de logs / auditoria de acessos', freq: 0 },
+  { value: 'PLANEJAMENTO DE CAPACIDADE (STORAGE, REDE, CPU)', label: 'Planejamento de capacidade (storage, rede, CPU)', freq: 0 },
+  { value: 'CONFIGURAÇÃO DE NOVO SERVIDOR / SERVIÇO DE INFRAESTRUTURA', label: 'Configuração de novo servidor / serviço de infraestrutura', freq: 0 },
+  { value: 'TESTES DE CONTINGÊNCIA / PLANO DE CONTINUIDADE', label: 'Testes de contingência / plano de continuidade', freq: 0 },
+  { value: 'REVISÃO E ATUALIZAÇÃO DE INVENTÁRIO (HARDWARE / SOFTWARE)', label: 'Revisão e atualização de inventário (hardware / software)', freq: 0 },
+  { value: 'REUNIÃO TÉCNICA / PLANEJAMENTO T.I.', label: 'Reunião técnica / planejamento T.I.', freq: 0 },
+  { value: 'CRIAÇÃO OU ALTERAÇÃO DE ROTINAS AUTOMÁTICAS (SCRIPTS, JOBS)', label: 'Criação ou alteração de rotinas automáticas (scripts, jobs)', freq: 0 },
+]
+
+// tracker ID -> categories
+const TRACKER_CATEGORIES = {
+  1: MUDANCA_CATEGORIES,
+  2: REQUISICAO_CATEGORIES,
+  3: INCIDENTE_CATEGORIES,
+  4: INTERNA_CATEGORIES,
+}
+
+export const ALL_CATEGORIES = [
+  ...INCIDENTE_CATEGORIES,
+  ...REQUISICAO_CATEGORIES,
+  ...MUDANCA_CATEGORIES,
+  ...INTERNA_CATEGORIES,
+]
+
+export function getCategoriesForTracker(trackerId) {
+  return TRACKER_CATEGORIES[trackerId] || INCIDENTE_CATEGORIES
+}
 
 export const PRIORITY_OPTIONS = [
   { value: '7', label: 'Urgente', color: 'red' },

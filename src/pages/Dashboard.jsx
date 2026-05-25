@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend
 } from 'recharts'
-import { Ticket, CheckCircle, Clock, AlertTriangle, PlusCircle, ArrowRight } from 'lucide-react'
+import { Ticket, CheckCircle, Clock, AlertTriangle, PlusCircle, ArrowRight, UserCheck } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
-import { getIssueStats, getMyOpenIssues } from '../services/redmineApi'
+import { getIssueStats, getMyOpenIssues, getMyAssignedIssues } from '../services/redmineApi'
 import { format, parseISO } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
@@ -48,7 +48,14 @@ export default function Dashboard() {
     enabled: !!credentials,
   })
 
+  const { data: assignedData } = useQuery({
+    queryKey: ['assigned-issues', credentials?.username],
+    queryFn: () => getMyAssignedIssues(credentials, 0, 10),
+    enabled: !!credentials,
+  })
+
   const issues = openData?.issues || []
+  const assignedIssues = assignedData?.issues || []
 
   // Group by priority for pie chart
   const byPriority = issues.reduce((acc, i) => {
@@ -88,9 +95,10 @@ export default function Dashboard() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard icon={Ticket} label="Chamados abertos" value={stats?.total_open} color="bg-blue-600" to="/chamados" />
-        <StatCard icon={CheckCircle} label="Chamados fechados" value={stats?.total_closed} color="bg-green-500" />
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        <StatCard icon={Ticket} label="Abertos por mim" value={stats?.total_open} color="bg-blue-600" to="/chamados" />
+        <StatCard icon={CheckCircle} label="Fechados por mim" value={stats?.total_closed} color="bg-green-500" />
+        <StatCard icon={UserCheck} label="Atribuídos a mim" value={stats?.total_assigned} color="bg-indigo-500" />
         <StatCard icon={AlertTriangle} label="Urgentes abertos" value={urgentCount} color="bg-red-500" />
         <StatCard icon={Clock} label="Total geral" value={(stats?.total_open || 0) + (stats?.total_closed || 0)} color="bg-purple-500" />
       </div>
@@ -130,10 +138,10 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Recent tickets */}
+      {/* Recent tickets opened by me */}
       <div className="card">
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-          <h3 className="font-semibold text-gray-800">Chamados Recentes</h3>
+          <h3 className="font-semibold text-gray-800">Chamados Abertos por Mim</h3>
           <Link to="/chamados" className="text-sm text-blue-600 hover:underline flex items-center gap-1">
             Ver todos <ArrowRight className="w-3 h-3" />
           </Link>
@@ -149,25 +157,34 @@ export default function Dashboard() {
         ) : (
           <div className="divide-y divide-gray-50">
             {issues.slice(0, 5).map(issue => (
-              <Link
-                key={issue.id}
-                to={`/chamados/${issue.id}`}
-                className="flex items-start gap-3 px-5 py-3.5 hover:bg-gray-50 transition-colors"
-              >
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-0.5">
-                    <span className="text-xs text-gray-400 font-mono">#{issue.id}</span>
-                    <PriorityBadge name={issue.priority?.name} />
-                  </div>
-                  <p className="text-sm font-medium text-gray-800 truncate">{issue.subject}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">{issue.project?.name}</p>
-                </div>
-                <div className="text-right shrink-0">
-                  <p className="text-xs text-gray-400">
-                    {format(parseISO(issue.updated_on), "dd/MM", { locale: ptBR })}
-                  </p>
-                </div>
-              </Link>
+              <IssueRow key={issue.id} issue={issue} />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Assigned to me */}
+      <div className="card">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+          <div className="flex items-center gap-2">
+            <UserCheck className="w-4 h-4 text-indigo-500" />
+            <h3 className="font-semibold text-gray-800">Chamados Atribuídos a Mim</h3>
+            {stats?.total_assigned > 0 && (
+              <span className="text-xs font-semibold bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">
+                {stats.total_assigned}
+              </span>
+            )}
+          </div>
+        </div>
+        {assignedIssues.length === 0 ? (
+          <div className="p-8 text-center text-gray-400">
+            <UserCheck className="w-10 h-10 mx-auto mb-2 opacity-40" />
+            <p>Nenhum chamado atribuído a você</p>
+          </div>
+        ) : (
+          <div className="divide-y divide-gray-50">
+            {assignedIssues.map(issue => (
+              <IssueRow key={issue.id} issue={issue} showAuthor />
             ))}
           </div>
         )}
@@ -184,4 +201,30 @@ function PriorityBadge({ name }) {
     'Baixa': 'badge-baixa',
   }
   return <span className={map[name] || 'badge-media'}>{name || 'Normal'}</span>
+}
+
+function IssueRow({ issue, showAuthor }) {
+  return (
+    <Link
+      to={`/chamados/${issue.id}`}
+      className="flex items-start gap-3 px-5 py-3.5 hover:bg-gray-50 transition-colors"
+    >
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 mb-0.5">
+          <span className="text-xs text-gray-400 font-mono">#{issue.id}</span>
+          <PriorityBadge name={issue.priority?.name} />
+        </div>
+        <p className="text-sm font-medium text-gray-800 truncate">{issue.subject}</p>
+        <p className="text-xs text-gray-400 mt-0.5">
+          {issue.project?.name}
+          {showAuthor && issue.author?.name && ` · por ${issue.author.name}`}
+        </p>
+      </div>
+      <div className="text-right shrink-0">
+        <p className="text-xs text-gray-400">
+          {format(parseISO(issue.updated_on), "dd/MM", { locale: ptBR })}
+        </p>
+      </div>
+    </Link>
+  )
 }

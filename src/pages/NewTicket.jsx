@@ -4,9 +4,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { PlusCircle, Paperclip, X, CheckCircle, ChevronDown } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { createIssue, uploadFile, getProjects, getTrackers } from '../services/redmineApi'
-import { USER_TICKET_TITLES, IT_TICKET_TITLES, PRIORITY_OPTIONS } from '../data/ticketTitles'
+import { getCategoriesForTracker, PRIORITY_OPTIONS } from '../data/ticketTitles'
 
 const EXCLUDED_PROJECTS = ['marketing', 'p&d', 'pesquisa']
+const ALLOWED_TRACKER_IDS = [1, 2, 3, 4]
 
 export default function NewTicket() {
   const { credentials } = useAuth()
@@ -16,7 +17,7 @@ export default function NewTicket() {
 
   const [form, setForm] = useState({
     project_id: '',
-    tracker_id: '1',
+    tracker_id: '3',
     subject: '',
     customSubject: false,
     description: '',
@@ -45,12 +46,12 @@ export default function NewTicket() {
   const projects = (projectsData?.projects || []).filter(
     p => !EXCLUDED_PROJECTS.some(ex => p.name.toLowerCase().includes(ex))
   )
-  const trackers = trackersData?.trackers || []
+  const trackers = (trackersData?.trackers || []).filter(t => ALLOWED_TRACKER_IDS.includes(t.id))
 
-  const allTitles = [...USER_TICKET_TITLES, ...IT_TICKET_TITLES]
+  const trackerCategories = getCategoriesForTracker(parseInt(form.tracker_id))
   const filteredTitles = subjectQuery.length > 1
-    ? allTitles.filter(t => t.label.toLowerCase().includes(subjectQuery.toLowerCase())).slice(0, 8)
-    : USER_TICKET_TITLES.slice(0, 8)
+    ? trackerCategories.filter(t => t.label.toLowerCase().includes(subjectQuery.toLowerCase())).slice(0, 8)
+    : trackerCategories.slice(0, 8)
 
   const mutation = useMutation({
     mutationFn: async (data) => {
@@ -102,7 +103,7 @@ export default function NewTicket() {
           <button onClick={() => navigate(`/chamados/${createdId}`)} className="btn-primary">
             Ver chamado
           </button>
-          <button onClick={() => { setSuccess(false); setForm({ project_id: '', tracker_id: '1', subject: '', customSubject: false, description: '', priority_id: '4' }); setFiles([]); setSubjectQuery('') }} className="btn-secondary">
+          <button onClick={() => { setSuccess(false); setForm({ project_id: '', tracker_id: '3', subject: '', customSubject: false, description: '', priority_id: '4' }); setFiles([]); setSubjectQuery('') }} className="btn-secondary">
             Novo chamado
           </button>
         </div>
@@ -140,18 +141,21 @@ export default function NewTicket() {
           </div>
 
           {/* Tracker */}
-          {trackers.length > 1 && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Tipo de chamado</label>
-              <select
-                value={form.tracker_id}
-                onChange={e => setForm(f => ({ ...f, tracker_id: e.target.value }))}
-                className="input"
-              >
-                {trackers.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
-              </select>
-            </div>
-          )}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Tipo de chamado *</label>
+            <select
+              value={form.tracker_id}
+              onChange={e => {
+                setForm(f => ({ ...f, tracker_id: e.target.value, subject: '', customSubject: false }))
+                setSubjectQuery('')
+              }}
+              className="input"
+              required
+            >
+              <option value="">Selecione o tipo...</option>
+              {trackers.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+            </select>
+          </div>
 
           {/* Subject with autocomplete */}
           <div>
