@@ -8,6 +8,7 @@ const PAGE_TITLES = {
   '/chamados': 'Meus Chamados',
   '/novo': 'Novo Chamado',
   '/faq': 'Base de Conhecimento',
+  '/manual': 'Manual do Usuário',
 }
 
 export default function Layout() {

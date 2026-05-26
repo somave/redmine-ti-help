@@ -9,6 +9,7 @@ import MyTickets from './pages/MyTickets'
 import NewTicket from './pages/NewTicket'
 import TicketDetail from './pages/TicketDetail'
 import FAQ from './pages/FAQ'
+import Manual from './pages/Manual'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,6 +36,7 @@ function AppRoutes() {
         <Route path="chamados/:id" element={<TicketDetail />} />
         <Route path="novo" element={<NewTicket />} />
         <Route path="faq" element={<FAQ />} />
+        <Route path="manual" element={<Manual />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

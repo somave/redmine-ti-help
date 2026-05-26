@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Ticket, PlusCircle, BookOpen, LogOut, X } from 'lucide-react'
+import { LayoutDashboard, Ticket, PlusCircle, BookOpen, BookText, LogOut, X } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 
 const nav = [
@@ -7,6 +7,7 @@ const nav = [
   { to: '/chamados', icon: Ticket, label: 'Meus Chamados' },
   { to: '/novo', icon: PlusCircle, label: 'Novo Chamado' },
   { to: '/faq', icon: BookOpen, label: 'Base de Conhecimento' },
+  { to: '/manual', icon: BookText, label: 'Manual do Usuário' },
 ]
 
 export default function Sidebar({ open, onClose }) {
