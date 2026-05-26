@@ -366,7 +366,7 @@ export default function Manual() {
           <button
             onClick={() => navigate('/novo')}
             className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors"
-            style={{ backgroundColor: '#c62828' }}
+            style={{ backgroundColor: '#2e7d32' }}
           >
             <PlusCircle className="w-4 h-4" />
             Abrir um Chamado
