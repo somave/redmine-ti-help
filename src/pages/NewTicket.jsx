@@ -21,7 +21,7 @@ export default function NewTicket() {
     subject: '',
     customSubject: false,
     description: '',
-    priority_id: '4',
+    priority_id: '2',
   })
   const [files, setFiles] = useState([])
   const [success, setSuccess] = useState(false)
@@ -105,7 +105,7 @@ export default function NewTicket() {
           <button onClick={() => navigate(`/chamados/${createdId}`)} className="btn-green">
             Ver chamado
           </button>
-          <button onClick={() => { setSuccess(false); setForm({ project_id: '', tracker_id: '3', subject: '', customSubject: false, description: '', priority_id: '4' }); setFiles([]); setSubjectQuery('') }} className="btn-secondary">
+          <button onClick={() => { setSuccess(false); setForm({ project_id: '', tracker_id: '3', subject: '', customSubject: false, description: '', priority_id: '2' }); setFiles([]); setSubjectQuery('') }} className="btn-secondary">
             Novo chamado
           </button>
         </div>

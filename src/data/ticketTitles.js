@@ -105,8 +105,8 @@ export function getCategoriesForTracker(trackerId) {
 }
 
 export const PRIORITY_OPTIONS = [
-  { value: '7', label: 'Urgente', color: 'red' },
-  { value: '6', label: 'Alta', color: 'orange' },
-  { value: '4', label: 'Normal', color: 'yellow' },
-  { value: '3', label: 'Baixa', color: 'green' },
+  { value: '4', label: 'Urgente', color: 'red' },
+  { value: '3', label: 'Alta', color: 'orange' },
+  { value: '2', label: 'Normal', color: 'yellow' },
+  { value: '1', label: 'Baixa', color: 'green' },
 ]
