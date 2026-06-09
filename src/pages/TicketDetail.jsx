@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { ArrowLeft, MessageSquare, Paperclip, Clock, User, Tag, Send, CheckCircle, RefreshCw } from 'lucide-react'
+import { ArrowLeft, MessageSquare, Paperclip, Clock, User, Tag, Send, CheckCircle, CheckCircle2, XCircle, RefreshCw, AlertCircle } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { getIssue, addComment } from '../services/redmineApi'
 import { format, parseISO } from 'date-fns'
@@ -33,6 +33,35 @@ export default function TicketDetail() {
       setComment('')
       refetch()
       queryClient.invalidateQueries({ queryKey: ['my-open'] })
+      queryClient.invalidateQueries({ queryKey: ['stats'] })
+    },
+  })
+
+  const finalizeMutation = useMutation({
+    mutationFn: () => addComment(
+      credentials, id,
+      comment.trim() || 'Problema resolvido. Chamado finalizado pelo usuário.',
+      3
+    ),
+    onSuccess: () => {
+      setComment('')
+      refetch()
+      queryClient.invalidateQueries({ queryKey: ['my-open'] })
+      queryClient.invalidateQueries({ queryKey: ['stats'] })
+    },
+  })
+
+  const rejectMutation = useMutation({
+    mutationFn: () => addComment(
+      credentials, id,
+      comment.trim() || 'Solução não resolveu o problema. Chamado rejeitado pelo usuário.',
+      6
+    ),
+    onSuccess: () => {
+      setComment('')
+      refetch()
+      queryClient.invalidateQueries({ queryKey: ['my-open'] })
+      queryClient.invalidateQueries({ queryKey: ['stats'] })
     },
   })
 
@@ -51,7 +80,8 @@ export default function TicketDetail() {
   )
 
   const journals = (issue.journals || []).filter(j => j.notes || j.details?.length > 0)
-  const isClosed = ['Fechado', 'Fechado por Falta de Resposta', 'Resolvido'].includes(issue.status?.name)
+  const isClosed = ['Resolvida', 'Retirada', 'Fechado por Falta de Resposta', 'Pausado'].includes(issue.status?.name)
+  const isWaitingUser = issue.status?.name === 'Aguardando usuário'
 
   return (
     <div className="max-w-3xl mx-auto space-y-4">
@@ -158,35 +188,71 @@ export default function TicketDetail() {
       {/* Add comment */}
       {!isClosed && (
         <div className="card p-5">
+          {isWaitingUser && (
+            <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 mb-4">
+              <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+              <p className="text-sm text-amber-800">
+                O T.I. está aguardando seu retorno. Confirme se o problema foi resolvido ou rejeite caso a solução não tenha funcionado.
+              </p>
+            </div>
+          )}
+
           <h3 className="font-semibold text-sm uppercase tracking-wide text-gray-500 mb-3 flex items-center gap-2">
             <MessageSquare className="w-4 h-4" />
-            Adicionar Comentário
+            {isWaitingUser ? 'Comentário (opcional)' : 'Adicionar Comentário'}
           </h3>
           <textarea
             value={comment}
             onChange={e => setComment(e.target.value)}
-            placeholder="Descreva a atualização do chamado, informações adicionais, ID do AnyDesk, etc."
+            placeholder={isWaitingUser
+              ? 'Descreva o que aconteceu — o problema foi resolvido? Ainda persiste? Detalhe aqui.'
+              : 'Descreva a atualização do chamado, informações adicionais, ID do AnyDesk, etc.'}
             className="input resize-none"
             rows={4}
           />
-          {commentMutation.error && (
-            <p className="text-sm text-red-600 mt-2">{commentMutation.error.message}</p>
+
+          {(commentMutation.error || finalizeMutation.error || rejectMutation.error) && (
+            <p className="text-sm text-red-600 mt-2">
+              {(commentMutation.error || finalizeMutation.error || rejectMutation.error)?.message}
+            </p>
           )}
           {commentMutation.isSuccess && (
             <p className="text-sm text-green-600 mt-2 flex items-center gap-1">
               <CheckCircle className="w-4 h-4" /> Comentário adicionado!
             </p>
           )}
-          <div className="flex justify-end mt-3">
-            <button
-              onClick={() => commentMutation.mutate()}
-              disabled={!comment.trim() || commentMutation.isPending}
-              className="btn-green flex items-center gap-2"
-            >
-              <Send className="w-4 h-4" />
-              {commentMutation.isPending ? 'Enviando...' : 'Enviar'}
-            </button>
-          </div>
+
+          {isWaitingUser ? (
+            <div className="flex flex-col sm:flex-row gap-3 mt-4 pt-4 border-t border-gray-100">
+              <button
+                onClick={() => rejectMutation.mutate()}
+                disabled={rejectMutation.isPending || finalizeMutation.isPending}
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg font-medium text-white transition-colors disabled:opacity-50 bg-red-600 hover:bg-red-700"
+              >
+                <XCircle className="w-4 h-4" />
+                {rejectMutation.isPending ? 'Rejeitando...' : 'Rejeitar — Problema não resolvido'}
+              </button>
+              <button
+                onClick={() => finalizeMutation.mutate()}
+                disabled={finalizeMutation.isPending || rejectMutation.isPending}
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg font-medium text-white transition-colors disabled:opacity-50 bg-green-600 hover:bg-green-700"
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                {finalizeMutation.isPending ? 'Finalizando...' : 'Confirmar — Problema resolvido'}
+              </button>
+            </div>
+          ) : (
+            <div className="flex justify-end mt-3">
+              <button
+                onClick={() => commentMutation.mutate()}
+                disabled={!comment.trim() || commentMutation.isPending}
+                className="btn-green flex items-center gap-2"
+              >
+                <Send className="w-4 h-4" />
+                {commentMutation.isPending ? 'Enviando...' : 'Enviar'}
+              </button>
+            </div>
+          )}
         </div>
       )}
 
@@ -214,14 +280,18 @@ function MetaItem({ icon: Icon, label, value }) {
 
 function StatusBadge({ status }) {
   const map = {
-    'Novo': 'bg-red-50 text-somave-red',
-    'Em andamento': 'bg-red-50 text-somave-red',
-    'Resolvido': 'bg-green-100 text-green-700',
-    'Fechado': 'bg-gray-100 text-gray-600',
+    'Nova':                        'bg-blue-50 text-blue-700',
+    'Em andamento':                'bg-orange-50 text-orange-700',
+    'Em análise':                  'bg-orange-50 text-orange-700',
+    'Aguardando usuário':          'bg-amber-100 text-amber-800',
+    'Resolvida':                   'bg-green-100 text-green-700',
+    'Rejeitada':                   'bg-red-100 text-red-700',
+    'Retirada':                    'bg-gray-100 text-gray-600',
+    'Pausado':                     'bg-gray-100 text-gray-600',
     'Fechado por Falta de Resposta': 'bg-gray-100 text-gray-600',
   }
   return (
-    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${map[status] || 'bg-red-50 text-somave-red'}`}>
+    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${map[status] || 'bg-gray-100 text-gray-600'}`}>
       {status}
     </span>
   )
